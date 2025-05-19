@@ -4,7 +4,6 @@ interface
 
     uses
         system.sysUtils, system.Math, system.Types,
-        GraphicDrawingTypes,
         LinearAlgebraTypes,
         VectorMethods,
         GeometryMathMethods,

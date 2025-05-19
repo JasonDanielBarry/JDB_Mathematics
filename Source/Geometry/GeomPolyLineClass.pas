@@ -4,7 +4,6 @@ interface
 
     uses
         System.SysUtils, system.Math,
-        GraphicDrawingTypes,
         GeometryTypes, GeomBox,
         GeometryMathMethods,
         GeometryBaseClass,

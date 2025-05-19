@@ -8,7 +8,6 @@ interface
         system.sysutils, system.Math,
         LinearAlgebraTypes,
         VectorMethods,
-        GraphicDrawingTypes,
         GeometryTypes,
         GeometryBaseClass;
 

@@ -4,9 +4,7 @@ interface
 
     uses
         system.SysUtils, system.Math,
-        GraphicDrawingTypes,
-        GeometryTypes, GeomBox,
-        DrawingAxisConversionClass;
+        GeometryTypes, GeomBox;
 
     type
         TGeomBase = class

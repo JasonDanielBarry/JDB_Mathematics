@@ -76,7 +76,7 @@ implementation
                 elementsAreEqual    : boolean;
                 i                   : integer;
             begin
-                if ( NOT(vectorsAreSameSize(vector1In, vector2In)) ) then
+                if NOT( vectorsAreSameSize(vector1In, vector2In) ) then
                     begin
                         result := False;
                         exit();
@@ -86,7 +86,7 @@ implementation
                     begin
                         elementsAreEqual := SameValue(vector1In[i], vector2In[i]);
 
-                        if (NOT(elementsAreEqual)) then
+                        if NOT( elementsAreEqual ) then
                             begin
                                 result := False;
                                 exit();
@@ -120,7 +120,7 @@ implementation
                 vectorOut   : TLAVector;
             begin
                 //sum can only occur if the vectors have the same size
-                    if ( NOT(vectorsAreSameSize(vector1In, vector2In)) ) then
+                    if NOT( vectorsAreSameSize( vector1In, vector2In ) ) then
                         exit();
 
                 //sum each component pair into the result vector
@@ -140,7 +140,7 @@ implementation
                 negativeTailVector : TLAVector;
             begin
                 //subtraction can only occur if the vectors have the same size
-                    if ( NOT(vectorsAreSameSize( vectorHeadIn, vectorTailIn )) ) then
+                    if NOT( vectorsAreSameSize( vectorHeadIn, vectorTailIn ) ) then
                         exit();
 
                 //the tail is subtracted from the head
@@ -157,7 +157,7 @@ implementation
                 dotProductSum   : double;
             begin
                 //dot product can only occur if the vectors have the same size
-                    if ( NOT(vectorsAreSameSize( vector1In, vector2In )) ) then
+                    if NOT(vectorsAreSameSize( vector1In, vector2In ) ) then
                         exit( 0 );
 
                 //multiply each element of V1 and V2 and add

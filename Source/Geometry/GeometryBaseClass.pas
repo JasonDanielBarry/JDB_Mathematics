@@ -88,7 +88,7 @@ implementation
         //centre point
             function TGeomBase.calculateCentrePoint() : TGeomPoint;
                 begin
-                    result := TGeomPoint.calculateCentrePoint( arrGeomPoints );
+                    result := boundingBox().calculateCentrePoint();
                 end;
 
             procedure TGeomBase.setCentrePoint(const xIn, yIn : double);
@@ -107,7 +107,7 @@ implementation
 
             procedure TGeomBase.setCentrePoint(const newCentrePointIn : TGeomPoint);
                 begin
-                    TGeomBox.setCentrePoint( newCentrePointIn, arrGeomPoints );
+                    TGeomPoint.setCentrePoint( calculateCentrePoint(), newCentrePointIn, arrGeomPoints );
                 end;
 
         //drawing points
@@ -131,6 +131,7 @@ implementation
                 begin
                     TGeomPoint.rotateArrPoints(
                                                     rotationAngleIn,
+                                                    calculateCentrePoint(),
                                                     arrGeomPoints
                                               );
                 end;

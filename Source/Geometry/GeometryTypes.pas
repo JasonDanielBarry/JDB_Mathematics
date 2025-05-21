@@ -43,6 +43,9 @@ interface
                     procedure setPoint(const xIn, yIn : double); overload;
                     procedure setPoint(const PointFIn : TPointF); overload;
                     procedure setPoint(const PointIn : TPoint); overload;
+                    class procedure setCentrePoint( const   currentCentrePointIn,
+                                                            newCentrePointIn    : TGeomPoint;
+                                                    var arrGeomPointsIn         : TArray<TGeomPoint> ); static;
                 //copy
                     procedure copyPoint(const otherGeomPointIn : TGeomPoint);
                     class procedure copyPoints(const arrPointsIn : TArray<TGeomPoint>; out arrPointsOut : TArray<TGeomPoint>); static;
@@ -76,9 +79,9 @@ interface
                     class procedure rotateArrPoints(const alphaIn, betaIn, gammaIn  : double;
                                                     var arrGeomPointsIn             : TArray<TGeomPoint>); overload; static;
                 //calculate vector from tail to head
-                    class function calculateVector(const headPointIn, tailPointIn : TGeomPoint) : TLAVector; static;
+                    class function calculateVector(const startPointIn, endPointIn : TGeomPoint) : TLAVector; static; inline;
                 //calculate centre point
-                    class function calculateCentrePoint(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint; static;
+                    class function calculateCentroidPoint(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint; static;
                 //calculate distance
                     class function calculateDistanceBetweenPoints(const point1In, point2In : TGeomPoint) : double; static;
                     function calculateDistanceToPoint(const otherPointIn : TGeomPoint) : double;
@@ -231,6 +234,25 @@ implementation
                     setPoint( pointIn.X, PointIn.Y );
                 end;
 
+            class procedure TGeomPoint.setCentrePoint(  const   currentCentrePointIn,
+                                                                newCentrePointIn        : TGeomPoint;
+                                                        var arrGeomPointsIn             : TArray<TGeomPoint> );
+                var
+                    i           : integer;
+                    shiftVector : TLAVector;
+                begin
+                    //calculate how far the points array must shift
+                        shiftVector := TGeomPoint.calculateVector( currentCentrePointIn, newCentrePointIn );
+
+                    //loop through the array and shift each point
+                        for i := 0 to (length(arrGeomPointsIn) - 1) do
+                            arrGeomPointsIn[i].shiftPoint(
+                                                            shiftVector[0],
+                                                            shiftVector[1],
+                                                            shiftVector[2]
+                                                         );
+                end;
+
         //copy
             procedure TGeomPoint.copyPoint(const otherGeomPointIn : TGeomPoint);
                 begin
@@ -314,7 +336,7 @@ implementation
                 var
                     groupCentrePoint : TGeomPoint;
                 begin
-                    groupCentrePoint := calculateCentrePoint( arrGeomPointsIn );
+                    groupCentrePoint := calculateCentroidPoint( arrGeomPointsIn );
 
                     scalePoints( scaleFactorIn, groupCentrePoint, arrGeomPointsIn );
                 end;
@@ -371,7 +393,7 @@ implementation
                 var
                     groupCentrePoint : TGeomPoint;
                 begin
-                    groupCentrePoint := calculateCentrePoint( arrGeomPointsIn );
+                    groupCentrePoint := calculateCentroidPoint( arrGeomPointsIn );
 
                     rotateArrPoints(    rotationAngleIn,
                                         groupCentrePoint,
@@ -383,7 +405,7 @@ implementation
                 var
                     groupCentrePoint : TGeomPoint;
                 begin
-                    groupCentrePoint := calculateCentrePoint( arrGeomPointsIn );
+                    groupCentrePoint := calculateCentroidPoint( arrGeomPointsIn );
 
                     rotateArrPoints(    alphaIn, betaIn, gammaIn,
                                         groupCentrePoint,
@@ -391,18 +413,17 @@ implementation
                 end;
 
         //calculate vector from tail to head
-            class function TGeomPoint.calculateVector(const headPointIn, tailPointIn : TGeomPoint) : TLAVector;
-                var
-                    vectorHead, vectorTail : TLAVector;
+            class function TGeomPoint.calculateVector(const startPointIn, endPointIn : TGeomPoint) : TLAVector;
                 begin
-                    vectorHead := headPointIn.toVector();
-                    vectorTail := tailPointIn.toVector();
-
-                    result := vectorSubtraction( vectorHead, vectorTail );
+                    result :=   [
+                                    endPointIn.x - startPointIn.x,
+                                    endPointIn.y - startPointIn.y,
+                                    endPointIn.z - startPointIn.z
+                                ];
                 end;
 
         //calculate centre point
-            class function TGeomPoint.calculateCentrePoint(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint;
+            class function TGeomPoint.calculateCentroidPoint(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint;
                 var
                     i, pointCount                                           : integer;
                     centroidX,          centroidY,          centroidZ,
@@ -430,12 +451,12 @@ implementation
 
         //calculate distance
             class function TGeomPoint.calculateDistanceBetweenPoints(const point1In, point2In : TGeomPoint) : double;
+                var
+                    P1P2Vector : TLAVector;
                 begin
-                    result := norm( [
-                                        point1In.x - point2In.x,
-                                        point1In.y - point2In.y,
-                                        point1In.z - point2In.z
-                                    ] );
+                    P1P2Vector := calculateVector( point1In, point2In );
+
+                    result := norm( P1P2Vector );
                 end;
 
             function TGeomPoint.calculateDistanceToPoint(const otherPointIn : TGeomPoint) : double;

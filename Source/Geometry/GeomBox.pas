@@ -21,12 +21,10 @@ interface
                 function calculateCentreX() : double;
                 function calculateCentreY() : double;
                 function calculateCentreZ() : double;
-                function getCentrePoint() : TGeomPoint;
+                function calculateCentrePoint() : TGeomPoint;
                 procedure setCentrePoint(const xIn, yIn, zIn : double); overload;
                 procedure setCentrePoint(const xIn, yIn : double); overload;
                 procedure setCentrePoint(const newCentrePointIn : TGeomPoint); overload;
-                class procedure setCentrePoint( const newCentrePointIn  : TGeomPoint;
-                                                var arrGeomPointsIn     : TArray<TGeomPoint> ); overload; static;
             //set boundaries
                 procedure setXBounds(const xMinIn, xMaxIn : double);
                 procedure setYBounds(const yMinIn, yMaxIn : double);
@@ -104,7 +102,7 @@ implementation
                 result := (minPoint.z + maxPoint.z) / 2;
             end;
 
-        function TGeomBox.getCentrePoint() : TGeomPoint;
+        function TGeomBox.calculateCentrePoint() : TGeomPoint;
             begin
                 result := TGeomPoint.create(
                                                 calculateCentreX(),
@@ -135,28 +133,6 @@ implementation
                                     newCentrePointIn.y,
                                     newCentrePointIn.z
                               );
-            end;
-
-        class procedure TGeomBox.setCentrePoint(const newCentrePointIn  : TGeomPoint;
-                                                var arrGeomPointsIn     : TArray<TGeomPoint>);
-            var
-                i                   : integer;
-                currentCentrePoint  : TGeomPoint;
-                shiftVector         : TLAVector;
-            begin
-                //calculate the centre point of the point array
-                    currentCentrePoint := TGeomPoint.calculateCentrePoint( arrGeomPointsIn );
-
-                //calculate how far the points array must shift
-                    shiftVector := TGeomPoint.calculateVector( newCentrePointIn, currentCentrePoint );
-
-                //loop through the array and shift each point
-                    for i := 0 to (length(arrGeomPointsIn) - 1) do
-                        arrGeomPointsIn[i].shiftPoint(
-                                                        shiftVector[0],
-                                                        shiftVector[1],
-                                                        shiftVector[2]
-                                                     );
             end;
 
     //set boundaries
@@ -303,7 +279,7 @@ implementation
 
         procedure TGeomBox.scaleBox(const scaleFactorIn : double);
             begin
-                self.scaleBox( scaleFactorIn, self.getCentrePoint() );
+                self.scaleBox( scaleFactorIn, self.calculateCentrePoint() );
             end;
 
     //new box with min point at (0, 0, 0) and x, y, x dimensions

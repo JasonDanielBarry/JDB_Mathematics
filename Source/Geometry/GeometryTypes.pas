@@ -79,7 +79,7 @@ interface
                     class procedure rotateArrPoints(const alphaIn, betaIn, gammaIn  : double;
                                                     var arrGeomPointsIn             : TArray<TGeomPoint>); overload; static;
                 //calculate vector from tail to head
-                    class function calculateVector(const startPointIn, endPointIn : TGeomPoint) : TLAVector; static; inline;
+                    class function calculateVector(const startPointIn, endPointIn : TGeomPoint) : TLAVector; static;
                 //calculate centre point
                     class function calculateCentroidPoint(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint; static;
                 //calculate distance

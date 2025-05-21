@@ -25,5 +25,4 @@ implementation
             result := lerp(t, Y0, Y1);
         end;
 
-
 end.

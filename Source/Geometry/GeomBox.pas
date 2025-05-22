@@ -15,6 +15,8 @@ interface
                 minPoint, maxPoint : TGeomPoint;
             //construction
                 constructor create(const point1In, point2In : TGeomPoint); overload;
+            //get corner points
+                function getCornerPoints2D() : Tarray<TGeomPoint>;
             //copy other
                 procedure copyBox(const otherBoxIn : TGeomBox);
             //centre point
@@ -78,6 +80,21 @@ implementation
         constructor TGeomBox.create(const point1In, point2In : TGeomPoint);
             begin
                 self.setPoints( point1In, point2In );
+            end;
+
+    //get corner points
+        function TGeomBox.getCornerPoints2D() : Tarray<TGeomPoint>;
+            var
+                arrGeomPointsOut : Tarray<TGeomPoint>;
+            begin
+                SetLength( arrGeomPointsOut, 4 );
+
+                arrGeomPointsOut[0].setPoint(xmin, yMin);
+                arrGeomPointsOut[1].setPoint(xMin, yMax);
+                arrGeomPointsOut[2].setPoint(xMax, yMax);
+                arrGeomPointsOut[3].setPoint(xMax, yMin);
+
+                result := arrGeomPointsOut;
             end;
 
     //copy other

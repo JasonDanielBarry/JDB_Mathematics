@@ -5,9 +5,9 @@ interface
     uses
         system.SysUtils, system.Math;
 
-    function lerp(const t_In, startValueIn, endValueIn : double) : double; inline;
+    function lerp(const t_In, startValueIn, endValueIn : double) : double;
 
-    function linearInterpolate(X, X0, Y0, X1, Y1 : double) : double; inline;
+    function linearInterpolate(X, X0, Y0, X1, Y1 : double) : double;
 
 implementation
 

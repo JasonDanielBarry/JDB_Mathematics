@@ -46,7 +46,7 @@ interface
                         procedure setEndPoint(const xIn, yIn, zIn : double); overload;
                         procedure setEndPoint(const endPointIn : TGeomPoint); overload;
                     procedure setPoints(const startPointIn, endPointIn : TGeomPoint);
-                //calculattions
+                //calculations
                     //line length
                         function calculateLength() : double; overload;
                     //unit vector
@@ -58,6 +58,9 @@ interface
                                                             const freeLineIn    : boolean = True) : TGeomLineIntersectionData; overload;
                         class function calculateLineIntersection(   const line1In, line2In  : TGeomLine;
                                                                     const freeLinesIn       : boolean = True    ) : TGeomLineIntersectionData; overload; static;
+                    //line midpoint
+                        class function calculateLineMidpoint(const startPointIn, endPointIn : TGeomPoint) : TGeomPoint; overload; static;
+                        function calculateLineMidpoint() : TGeomPoint; overload;
         end;
 
 implementation
@@ -255,5 +258,15 @@ implementation
                         result := lineIntersectionDataOut;
                     end;
 
+            //line midpoint
+                class function TGeomLine.calculateLineMidpoint(const startPointIn, endPointIn : TGeomPoint) : TGeomPoint;
+                    begin
+                        result := TGeomPoint.calculateCentroidPoint( [startPointIn, endPointIn] );
+                    end;
+
+                function TGeomLine.calculateLineMidpoint() : TGeomPoint;
+                    begin
+                        result := calculateLineMidpoint( getStartPoint(), getEndPoint() );
+                    end;
 
 end.

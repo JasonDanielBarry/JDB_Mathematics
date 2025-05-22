@@ -84,7 +84,7 @@ implementation
 
                 for i := 0 to (Length(vector1In) - 1) do
                     begin
-                        elementsAreEqual := SameValue(vector1In[i], vector2In[i]);
+                        elementsAreEqual := SameValue( vector1In[i], vector2In[i], 1e-6 );
 
                         if NOT( elementsAreEqual ) then
                             begin

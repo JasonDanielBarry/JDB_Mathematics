@@ -21,13 +21,13 @@ interface
                 //bounding box
                     function boundingBox() : TGeomBox;
                     class function determineBoundingBox(arrGeomIn : TArray<TGeomBase>) : TGeomBox; static;
-                //centre point
-                    function calculateCentrePoint() : TGeomPoint;
-                    procedure setCentrePoint(const xIn, yIn : double); overload;
-                    procedure setCentrePoint(const xIn, yIn, zIn : double); overload;
-                    procedure setCentrePoint(const newCentrePointIn : TGeomPoint); overload;
+                //centroid point
+                    function calculateCentroidPoint() : TGeomPoint; virtual;
+                    procedure setCentroidPoint(const xIn, yIn : double); overload;
+                    procedure setCentroidPoint(const xIn, yIn, zIn : double); overload;
+                    procedure setCentroidPoint(const newCentroidPointIn : TGeomPoint); overload;
                 //drawing points
-                    function getDrawingPoints() : TArray<TGeomPoint>;
+                    function getArrGeomPoints() : TArray<TGeomPoint>;
                 //rotation
                     procedure rotate(   const rotationAngleIn           : double;
                                         const rotationReferencePointIn  : TGeomPoint    ); overload;
@@ -85,33 +85,33 @@ implementation
                     result := boxOut;
                 end;
 
-        //centre point
-            function TGeomBase.calculateCentrePoint() : TGeomPoint;
+        //centroid point
+            function TGeomBase.calculateCentroidPoint() : TGeomPoint;
                 begin
-                    result := boundingBox().calculateCentrePoint();
+                    result := TGeomPoint.calculateCentroidPoint( arrGeomPoints );
                 end;
 
-            procedure TGeomBase.setCentrePoint(const xIn, yIn : double);
+            procedure TGeomBase.setCentroidPoint(const xIn, yIn : double);
                 begin
-                    setCentrePoint( xIn, yIn, 0 );
+                    setCentroidPoint( xIn, yIn, 0 );
                 end;
 
-            procedure TGeomBase.setCentrePoint(const xIn, yIn, zIn : double);
+            procedure TGeomBase.setCentroidPoint(const xIn, yIn, zIn : double);
                 var
-                    newCentrePoint : TGeomPoint;
+                    newCentroidPoint : TGeomPoint;
                 begin
-                    newCentrePoint := TGeomPoint.create( xIn, yIn, zIn );
+                    newCentroidPoint := TGeomPoint.create( xIn, yIn, zIn );
 
-                    setCentrePoint( newCentrePoint );
+                    setCentroidPoint( newCentroidPoint );
                 end;
 
-            procedure TGeomBase.setCentrePoint(const newCentrePointIn : TGeomPoint);
+            procedure TGeomBase.setCentroidPoint(const newCentroidPointIn : TGeomPoint);
                 begin
-                    TGeomPoint.setCentrePoint( calculateCentrePoint(), newCentrePointIn, arrGeomPoints );
+                    TGeomPoint.shiftArrPointsByVector( calculateCentroidPoint(), newCentroidPointIn, arrGeomPoints );
                 end;
 
         //drawing points
-            function TGeomBase.getDrawingPoints() : TArray<TGeomPoint>;
+            function TGeomBase.getArrGeomPoints() : TArray<TGeomPoint>;
                 begin
                     result := arrGeomPoints;
                 end;
@@ -129,11 +129,7 @@ implementation
 
             procedure TGeomBase.rotate(const rotationAngleIn : double);
                 begin
-                    TGeomPoint.rotateArrPoints(
-                                                    rotationAngleIn,
-                                                    calculateCentrePoint(),
-                                                    arrGeomPoints
-                                              );
+                    rotate( rotationAngleIn, calculateCentroidPoint() );
                 end;
 
         //scaling
@@ -145,7 +141,7 @@ implementation
 
             procedure TGeomBase.scale(const scaleFactorIn : double);
                 begin
-                    TGeomPoint.scalePoints( scaleFactorIn, arrGeomPoints );
+                    scale( scaleFactorIn, calculateCentroidPoint() );
                 end;
 
         //shift the geometry

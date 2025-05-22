@@ -34,10 +34,13 @@ interface
                         procedure editVertex(   indexIn     : integer;
                                                 newPointIn  : TGeomPoint); overload;
                 //calculations
+                    function calculateCentroidPoint() : TGeomPoint; override;
                     function calculatePolylineLength() : double; overload;
+                    class function calculatePolylineCentroid(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint; static;
                     class function calculatePolylineLength(const arrPointsIn : TArray<TGeomPoint>) : double; overload; static;
                 //helper methods
                     function vertexCount() : integer;
+                    function lineCount() : integer;
                     procedure clearVertices();
         end;
 
@@ -131,9 +134,46 @@ implementation
                     end;
 
         //calculations
+            function TGeomPolyLine.calculateCentroidPoint() : TGeomPoint;
+                begin
+                    result := calculatePolylineCentroid( arrGeomPoints );
+                end;
+
             function TGeomPolyLine.calculatePolylineLength() : double;
                 begin
                     result := calculatePolylineLength( arrGeomPoints );
+                end;
+
+            class function TGeomPolyLine.calculatePolylineCentroid(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint;
+                var
+                    i, arrLen                       : integer;
+                    centroidX, centroidY, centroidZ,
+                    lineLength, totalLength         : double;
+                    lineMidPoint                    : TGeomPoint;
+                    arr_XdL, arr_YdL, arr_ZdL       : TArray<double>;
+                begin
+                    arrLen      := length( arrPointsIn ) - 1;
+                    totalLength := calculatePolylineLength( arrPointsIn );
+
+                    SetLength( arr_XdL, arrLen );
+                    SetLength( arr_YdL, arrLen );
+                    SetLength( arr_ZdL, arrLen );
+
+                    for i := 0 to (arrLen - 1) do
+                        begin
+                            lineMidPoint    := TGeomLine.calculateLineMidpoint( arrPointsIn[i], arrPointsIn[i+1] );
+                            lineLength      := TGeomPoint.calculateDistanceBetweenPoints( arrPointsIn[i], arrPointsIn[i+1] );
+
+                            arr_XdL[i] := lineMidPoint.x * lineLength;
+                            arr_YdL[i] := lineMidPoint.y * lineLength;
+                            arr_ZdL[i] := lineMidPoint.z * lineLength;
+                        end;
+
+                    centroidX := sum( arr_XdL ) / totalLength;
+                    centroidY := sum( arr_YdL ) / totalLength;
+                    centroidZ := sum( arr_ZdL ) / totalLength;
+
+                    result := TGeomPoint.create( centroidX, centroidY, centroidZ );
                 end;
 
             class function TGeomPolyLine.calculatePolylineLength(const arrPointsIn : TArray<TGeomPoint>) : double;
@@ -143,7 +183,7 @@ implementation
                 begin
                     lengthSum := 0;
 
-                    for i := 0 to (length(arrPointsIn) - 2) do
+                    for i := 0 to ( length(arrPointsIn) - 2) do
                         lengthSum := lengthSum + TGeomPoint.calculateDistanceBetweenPoints( arrPointsIn[i], arrPointsIn[i + 1] );
 
                     result := lengthSum;
@@ -153,6 +193,11 @@ implementation
             function TGeomPolyLine.vertexCount() : integer;
                 begin
                     result := Length( arrGeomPoints );
+                end;
+
+            function TGeomPolyLine.lineCount() : integer;
+                begin
+                    result := vertexCount() - 1;
                 end;
 
             procedure TGeomPolyLine.clearVertices();

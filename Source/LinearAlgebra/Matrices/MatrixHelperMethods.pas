@@ -138,7 +138,7 @@ implementation
                         value1 := matrix1In[rowIn][colIn];
                         value2 := matrix2In[rowIn][colIn];
 
-                        result := SameValue(value1, value2);
+                        result := SameValue(value1, value2, 1e-6);
                     end;
             begin
                 //get sizes

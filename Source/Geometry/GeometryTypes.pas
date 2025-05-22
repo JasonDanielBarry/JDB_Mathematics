@@ -43,9 +43,6 @@ interface
                     procedure setPoint(const xIn, yIn : double); overload;
                     procedure setPoint(const PointFIn : TPointF); overload;
                     procedure setPoint(const PointIn : TPoint); overload;
-                    class procedure setCentrePoint( const   currentCentrePointIn,
-                                                            newCentrePointIn    : TGeomPoint;
-                                                    var arrGeomPointsIn         : TArray<TGeomPoint> ); static;
                 //copy
                     procedure copyPoint(const otherGeomPointIn : TGeomPoint);
                     class procedure copyPoints(const arrPointsIn : TArray<TGeomPoint>; out arrPointsOut : TArray<TGeomPoint>); static;
@@ -55,6 +52,9 @@ interface
                     procedure shiftZ(const deltaZIn : double);
                     procedure shiftPoint(const deltaXIn, deltaYIn : double); overload;
                     procedure shiftPoint(const deltaXIn, deltaYIn, deltaZIn : double); overload;
+                    class procedure shiftArrPointsByVector( const   vectorStartPointIn,
+                                                                    vectorEndPointIn    : TGeomPoint;
+                                                            var arrGeomPointsIn         : TArray<TGeomPoint> ); static;
                 //scale point distance from other point
                     procedure scalePoint(   const scaleFactorIn     : double;
                                             const referencePointIn  : TGeomPoint    );
@@ -234,15 +234,15 @@ implementation
                     setPoint( pointIn.X, PointIn.Y );
                 end;
 
-            class procedure TGeomPoint.setCentrePoint(  const   currentCentrePointIn,
-                                                                newCentrePointIn        : TGeomPoint;
-                                                        var arrGeomPointsIn             : TArray<TGeomPoint> );
+            class procedure TGeomPoint.shiftArrPointsByVector(  const   vectorStartPointIn,
+                                                                        vectorEndPointIn    : TGeomPoint;
+                                                                var arrGeomPointsIn         : TArray<TGeomPoint> );
                 var
                     i           : integer;
                     shiftVector : TLAVector;
                 begin
-                    //calculate how far the points array must shift
-                        shiftVector := TGeomPoint.calculateVector( currentCentrePointIn, newCentrePointIn );
+                    //calculate the vector by which the points array must shift
+                        shiftVector := TGeomPoint.calculateVector( vectorStartPointIn, vectorEndPointIn );
 
                     //loop through the array and shift each point
                         for i := 0 to (length(arrGeomPointsIn) - 1) do

@@ -19,10 +19,16 @@ interface
         //given two vertices
             function geomTriangleArea(const point1In, point2In : TGeomPoint) : double; overload;
 
-    
+    //calculate trianlge centroid
+        //given three vertices
+            function geomTriangleCentroid(const point1In, point2In, point3In : TGeomPoint) : TGeomPoint; overload;
+
+        //given two vertices
+            function geomTriangleCentroid(const point1In, point2In : TGeomPoint) : TGeomPoint; overload;
+
     //calculate the intersection point of two lines
-        function geomLineIntersectionPoint( const   line1Point0In, line1Point1In,
-                                                    line2Point0In, line2Point1In    : TGeomPoint) : TGeomLineIntersectionData;
+        function geomLineIntersectionPoint( const   line1StartPointIn, line1EndPointIn,
+                                                    line2StartPointIn, line2EndPointIn  : TGeomPoint) : TGeomLineIntersectionData;
 
 implementation
 
@@ -76,26 +82,39 @@ implementation
                     result := geomTriangleArea(point1In, point2In, point3);
                 end;
 
+    //calculate trianlge centroid
+        //given three vertices
+            function geomTriangleCentroid(const point1In, point2In, point3In : TGeomPoint) : TGeomPoint;
+                begin
+                    result := TGeomPoint.calculateCentroidPoint( [ point1In, point2In, point3In ] );
+                end;
+
+        //given two vertices
+            function geomTriangleCentroid(const point1In, point2In : TGeomPoint) : TGeomPoint;
+                begin
+                    result := geomTriangleCentroid( TGeomPoint.create( 0, 0 ), point1In, point2In );
+                end;
+
     //calculate the intersection point of two lines
-        function calculateLineIntersectionPoint(out     linesIntersectOut               : boolean;
-                                                const   line1Point0In, line1Point1In,
-                                                        line2Point0In, line2Point1In    : TGeomPoint) : TGeomPoint;
+        function calculateLineIntersectionPoint(out     linesIntersectOut                   : boolean;
+                                                const   line1StartPointIn, line1EndPointIn,
+                                                        line2StartPointIn, line2EndPointIn  : TGeomPoint) : TGeomPoint;
             var
                 l1x0, l1y0, l1x1, l1y1,
                 l2x0, l2y0, l2x1, l2y1  : double;
                 intersectionPoint       : TPointF;
             begin
                 //line 1 info
-                    l1x0 := line1Point0In.x;
-                    l1y0 := line1Point0In.y;
-                    l1x1 := line1Point1In.x;
-                    l1y1 := line1Point1In.y;
+                    l1x0 := line1StartPointIn.x;
+                    l1y0 := line1StartPointIn.y;
+                    l1x1 := line1EndPointIn.x;
+                    l1y1 := line1EndPointIn.y;
 
                 //line 2 info
-                    l2x0 := line2Point0In.x;
-                    l2y0 := line2Point0In.y;
-                    l2x1 := line2Point1In.x;
-                    l2y1 := line2Point1In.y;
+                    l2x0 := line2StartPointIn.x;
+                    l2y0 := line2StartPointIn.y;
+                    l2x1 := line2EndPointIn.x;
+                    l2y1 := line2EndPointIn.y;
 
                 intersectionPoint := lineIntersectionPoint( linesIntersectOut,
                                                             l1x0, l1y0, l1x1, l1y1,
@@ -105,16 +124,16 @@ implementation
             end;
 
         function determineLineIntersectionRegion(const  intersectionPointIn,
-                                                        line1Point0In, line1Point1In,
-                                                        line2Point0In, line2Point1In    : TGeomPoint) : EBoundaryRelation;
+                                                        line1StartPointIn, line1EndPointIn,
+                                                        line2StartPointIn, line2EndPointIn  : TGeomPoint) : EBoundaryRelation;
             var
                 isWithinLine1,  isWithinLine2   : boolean;
                 line1Bound,     line2Bound      : TGeomBox;
                 boundaryRelationOut             : EBoundaryRelation;
             begin
                 //get line bounding boxes
-                    line1Bound := TGeomBox.create( line1Point0In, line1Point1In );
-                    line2Bound := TGeomBox.create( line2Point0In, line2Point1In );
+                    line1Bound := TGeomBox.create( line1StartPointIn, line1EndPointIn );
+                    line2Bound := TGeomBox.create( line2StartPointIn, line2EndPointIn );
 
                 //test if point is on either line
                     isWithinLine1 := line1Bound.pointIsWithin( intersectionPointIn );
@@ -129,22 +148,22 @@ implementation
                 result := boundaryRelationOut;
             end;
 
-        function geomLineIntersectionPoint( const   line1Point0In, line1Point1In,
-                                                    line2Point0In, line2Point1In    : TGeomPoint) : TGeomLineIntersectionData;
+        function geomLineIntersectionPoint( const   line1StartPointIn, line1EndPointIn,
+                                                    line2StartPointIn, line2EndPointIn  : TGeomPoint) : TGeomLineIntersectionData;
             var
                 intersectionDataOut : TGeomLineIntersectionData;
             begin
                 //calculate the intersection point
                     intersectionDataOut.point := calculateLineIntersectionPoint(    intersectionDataOut.intersectionExists,
-                                                                                    line1Point0In, line1Point1In,
-                                                                                    line2Point0In, line2Point1In                );
+                                                                                    line1StartPointIn, line1EndPointIn,
+                                                                                    line2StartPointIn, line2EndPointIn                );
 
                 //determine where the intersection lies
                     if (intersectionDataOut.intersectionExists) then
                         begin
                             intersectionDataOut.relativeToBound := determineLineIntersectionRegion( intersectionDataOut.point,
-                                                                                                    line1Point0In, line1Point1In,
-                                                                                                    line2Point0In, line2Point1In    );
+                                                                                                    line1StartPointIn, line1EndPointIn,
+                                                                                                    line2StartPointIn, line2EndPointIn    );
                         end;
 
                 result := intersectionDataOut;

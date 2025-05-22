@@ -17,9 +17,11 @@ interface
                 //destructor
                     destructor destroy(); override;
                 //calculations
+                    function calculateCentroidPoint() : TGeomPoint; override;
                     function calculatePerimeter() : double;
                     function calculatePolygonArea() : double; overload;
-                    class function calculatePolygoneArea(const arrPointsIn : TArray<TGeomPoint>) : double; overload; static;
+                    class function calculatePolygonCentroid(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint; static;
+                    class function calculatePolygonArea(const arrPointsIn : TArray<TGeomPoint>) : double; overload; static;
         end;
 
 implementation
@@ -38,6 +40,11 @@ implementation
                 end;
 
         //calculations
+            function TGeomPolygon.calculateCentroidPoint() : TGeomPoint;
+                begin
+                    result := calculatePolygonCentroid( arrGeomPoints );
+                end;
+
             function TGeomPolygon.calculatePerimeter() : double;
                 var
                     closingLineLength,
@@ -65,10 +72,42 @@ implementation
 
             function TGeomPolygon.calculatePolygonArea() : double;
                 begin
-                    result := calculatePolygoneArea( arrGeomPoints );
+                    result := calculatePolygonArea( arrGeomPoints );
                 end;
 
-            class function TGeomPolygon.calculatePolygoneArea(const arrPointsIn : TArray<TGeomPoint>) : double;
+            class function TGeomPolygon.calculatePolygonCentroid(const arrPointsIn : TArray<TGeomPoint>) : TGeomPoint;
+                var
+                    i, arrLen                       : integer;
+                    centroidX, centroidY, centroidZ,
+                    triangleArea, totalArea         : double;
+                    triangleCentroidPoint           : TGeomPoint;
+                    arr_XdA, arr_YdA, arr_ZdA       : TArray<double>;
+                begin
+                    arrLen      := length( arrPointsIn );
+                    totalArea   := calculatePolygonArea( arrPointsIn );
+
+                    SetLength( arr_XdA, arrLen );
+                    SetLength( arr_YdA, arrLen );
+                    SetLength( arr_ZdA, arrLen );
+
+                    for i := 0 to ( arrLen - 1 ) do
+                        begin
+                            triangleCentroidPoint   := geomTriangleCentroid( arrPointsIn[i], arrPointsIn[ (i+1) mod arrlen ] );
+                            triangleArea            := geomTriangleArea( arrPointsIn[i], arrPointsIn[ (i+1) mod arrlen ] );
+
+                            arr_XdA[i] := triangleCentroidPoint.x * triangleArea;
+                            arr_YdA[i] := triangleCentroidPoint.y * triangleArea;
+                            arr_ZdA[i] := triangleCentroidPoint.z * triangleArea;
+                        end;
+
+                    centroidX := sum( arr_XdA ) / totalArea;
+                    centroidY := sum( arr_YdA ) / totalArea;
+                    centroidZ := sum( arr_ZdA ) / totalArea;
+
+                    result := TGeomPoint.create( centroidX, centroidY, centroidZ );
+                end;
+
+            class function TGeomPolygon.calculatePolygonArea(const arrPointsIn : TArray<TGeomPoint>) : double;
                 var
                     i, arrLen   : integer;
                     areaSum     : double;
@@ -77,13 +116,11 @@ implementation
 
                     areaSum := 0;
 
-                    arrLen := Length(arrPointsIn);
+                    arrLen := Length( arrPointsIn );
 
                     //shoelace calculation
-                        for i := 0 to (arrLen - 2) do
-                            areaSum := areaSum + geomTriangleArea(arrPointsIn[i], arrPointsIn[i + 1]);
-
-                        areaSum := areaSum + geomTriangleArea(arrPointsIn[arrLen - 1], arrPointsIn[0]);
+                        for i := 0 to (arrLen - 1) do
+                            areaSum := areaSum + geomTriangleArea(arrPointsIn[i], arrPointsIn[ (i+1) mod arrlen ]);
 
                     result := areaSum;
                 end;

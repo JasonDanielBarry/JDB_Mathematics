@@ -251,7 +251,7 @@ implementation
                 begin
                     gaussElimMatrix := matrixGaussElimination(gaussSuccessful, matrixIn);
 
-                    if ( NOT(gaussSuccessful) ) then
+                    if NOT( gaussSuccessful ) then
                         exit( 0 );
 
                     size := Length(matrixIn);
@@ -310,7 +310,7 @@ implementation
                     diagonalZeroValue   : double;
                 begin
                     //check if the input matrix is square (N x N)
-                        if ( NOT(matrixIsSquare(matrixIn)) ) then
+                        if NOT( matrixIsSquare(matrixIn) ) then
                             begin
                                 result := 0;
                                 exit();

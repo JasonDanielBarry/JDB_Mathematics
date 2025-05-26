@@ -32,7 +32,7 @@ implementation
                 lengthChange, lengthOld : double;
             begin
                 //check if the start value and end value are identical - cannot divide by zero
-                    if ( SameValue(startValueIn, endValueIn) ) then
+                    if ( SameValue( startValueIn, endValueIn ) ) then
                         begin
                             newEndValueOut := endValueIn;
 
@@ -60,20 +60,25 @@ implementation
                     scaleLinear( scaleAboutValueIn, endValueIn, scaleFactorIn, newEndValueOut );
             end;
 
+        function calculateScaleFactor(const oldLineStartValueIn, oldLineEndValueIn, newLineLengthIn : double) : double;
+            begin
+                result := abs( newLineLengthIn / (oldLineEndValueIn - oldLineStartValueIn) );
+            end;
+
         procedure resizeLine(   const   startValueIn, endValueIn,
                                         newLengthIn             : double;
                                 out     newEndValueOut          : double    );
             var
                 scaleFactor : double;
             begin
-                if ( SameValue(startValueIn, endValueIn) ) then
+                if ( SameValue( startValueIn, endValueIn ) ) then
                     begin
                         newEndValueOut := startValueIn + newLengthIn;
                         exit();
                     end;
 
                 //the scale factor is the ratio of the new line length to the old line length
-                    scaleFactor := abs( newLengthIn / (endValueIn - startValueIn) );
+                    scaleFactor := calculateScaleFactor( startValueIn, endValueIn, newLengthIn );
 
                 scaleLinear(startValueIn, endValueIn,
                             scaleFactor,
@@ -86,7 +91,7 @@ implementation
             var
                 scaleFactor : double;
             begin
-                if ( SameValue(startValueIn, endValueIn) ) then
+                if ( SameValue( startValueIn, endValueIn ) ) then
                     begin
                         newStartValueOut    := startValueIn - (newLengthIn / 2);
                         newEndValueOut      := endValueIn   + (newLengthIn / 2);
@@ -94,7 +99,7 @@ implementation
                     end;
 
                 //the scale factor is the ratio of the new line length to the old line length
-                    scaleFactor := abs( newLengthIn / (endValueIn - startValueIn) );
+                    scaleFactor := calculateScaleFactor( startValueIn, endValueIn, newLengthIn );
 
                 scaleLinear(startValueIn,       endValueIn,
                             scaleAboutValueIn,  scaleFactor,

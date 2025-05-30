@@ -32,13 +32,21 @@ interface
                     procedure rotate(   const rotationAngleIn           : double;
                                         const rotationReferencePointIn  : TGeomPoint    ); overload;
                     procedure rotate(const rotationAngleIn : double); overload;
+                    class procedure rotate( const rotationAngleIn           : double;
+                                            const rotationReferencePointIn  : TGeomPoint;
+                                            arrGeometryInOut                : TArray<TGeomBase> ); overload; static;
                 //scaling
                     procedure scale(const scaleFactorIn         : double;
                                     const scaleReferencePointIn : TGeomPoint); overload;
                     procedure scale(const scaleFactorIn : double); overload;
+                    class procedure scale(  const scaleFactorIn         : double;
+                                            const scaleReferencePointIn : TGeomPoint;
+                                            arrGeometryInOut            : TArray<TGeomBase> ); overload; static;
                 //shift the geometry
                     procedure shift(const deltaXIn, deltaYIn, deltaZIn : double); overload;
                     procedure shift(const deltaXIn, deltaYIn : double); overload;
+                    class procedure shift(  const deltaXIn, deltaYIn    : double;
+                                            arrGeometryInOut            : TArray<TGeomBase> ); overload; static;
         end;
 
 implementation
@@ -132,6 +140,18 @@ implementation
                     rotate( rotationAngleIn, calculateCentroidPoint() );
                 end;
 
+            class procedure TGeomBase.rotate(   const rotationAngleIn           : double;
+                                                const rotationReferencePointIn  : TGeomPoint;
+                                                arrGeometryInOut                : TArray<TGeomBase> );
+                var
+                    i, arrlen : integer;
+                begin
+                    arrlen := length( arrGeometryInOut );
+
+                    for i := 0 to ( arrlen - 1 ) do
+                        arrGeometryInOut[i].rotate( rotationAngleIn, rotationReferencePointIn );
+                end;
+
         //scaling
             procedure TGeomBase.scale(  const scaleFactorIn         : double;
                                         const scaleReferencePointIn : TGeomPoint    );
@@ -142,6 +162,18 @@ implementation
             procedure TGeomBase.scale(const scaleFactorIn : double);
                 begin
                     scale( scaleFactorIn, calculateCentroidPoint() );
+                end;
+
+            class procedure TGeomBase.scale(const scaleFactorIn         : double;
+                                            const scaleReferencePointIn : TGeomPoint;
+                                            arrGeometryInOut            : TArray<TGeomBase>);
+                var
+                    i, arrlen : integer;
+                begin
+                    arrlen := length( arrGeometryInOut );
+
+                    for i := 0 to ( arrlen - 1 ) do
+                        arrGeometryInOut[i].scale( scaleFactorIn, scaleReferencePointIn );
                 end;
 
         //shift the geometry
@@ -161,6 +193,15 @@ implementation
                         arrGeomPoints[i].shiftPoint( deltaXIn, deltaYIn );
                 end;
 
+            class procedure TGeomBase.shift(const deltaXIn, deltaYIn    : double;
+                                            arrGeometryInOut            : TArray<TGeomBase> );
+                var
+                    i, arrlen : integer;
+                begin
+                    arrlen := length( arrGeometryInOut );
 
+                    for i := 0 to ( arrlen - 1 ) do
+                        arrGeometryInOut[i].shift( deltaXIn, deltaYIn );
+                end;
 
 end.

@@ -47,6 +47,8 @@ interface
                         procedure setEndPoint(const endPointIn : TGeomPoint); overload;
                     procedure setPoints(const startPointIn, endPointIn : TGeomPoint);
                 //calculations
+                    //line angle
+                        function calculate2DLineAngle() : double;
                     //line length
                         function calculateLength() : double; overload;
                     //unit vector
@@ -173,6 +175,20 @@ implementation
                 end;
 
         //calculations
+            //line angle
+                function TGeomLine.calculate2DLineAngle() : double;
+                    var
+                        radAngle,
+                        dx, dy      : double;
+                    begin
+                        dx := lineVector[0];
+                        dy := lineVector[1];
+
+                        radAngle := ArcTan2( dy, dx );
+
+                        result := RadToDeg( radAngle );
+                    end;
+
             //line length
                 function TGeomLine.calculateLength() : double;
                     begin

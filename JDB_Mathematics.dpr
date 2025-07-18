@@ -18,8 +18,6 @@ uses
   LinearRescalingMethods in 'Source\LinearRescalingMethods.pas',
   RoundingMethods in 'Source\RoundingMethods.pas',
   TEST_RoundingMethods in 'Source\TEST_RoundingMethods.pas',
-  LimitStateAngleClass in 'Source\Engineering\LimitStateAngleClass.pas',
-  LimitStateMaterialClass in 'Source\Engineering\LimitStateMaterialClass.pas',
   GeomBox in 'Source\Geometry\GeomBox.pas',
   GeometryBaseClass in 'Source\Geometry\GeometryBaseClass.pas',
   GeometryMathMethods in 'Source\Geometry\GeometryMathMethods.pas',
@@ -35,7 +33,14 @@ uses
   MatrixDeterminantMethods in 'Source\LinearAlgebra\Matrices\MatrixDeterminantMethods.pas',
   MatrixHelperMethods in 'Source\LinearAlgebra\Matrices\MatrixHelperMethods.pas',
   MatrixMethods in 'Source\LinearAlgebra\Matrices\MatrixMethods.pas',
-  TEST_MatrixMethods in 'Source\LinearAlgebra\Matrices\TEST_MatrixMethods.pas';
+  TEST_MatrixMethods in 'Source\LinearAlgebra\Matrices\TEST_MatrixMethods.pas',
+  DrawingAxisConversionAspectRatioClass in 'Source\AxisConversion\DrawingAxisConversionAspectRatioClass.pas',
+  DrawingAxisConversionBaseClass in 'Source\AxisConversion\DrawingAxisConversionBaseClass.pas',
+  DrawingAxisConversionCalculationsClass in 'Source\AxisConversion\DrawingAxisConversionCalculationsClass.pas',
+  DrawingAxisConversionClass in 'Source\AxisConversion\DrawingAxisConversionClass.pas',
+  DrawingAxisConversionMouseControlClass in 'Source\AxisConversion\DrawingAxisConversionMouseControlClass.pas',
+  DrawingAxisConversionPanningClass in 'Source\AxisConversion\DrawingAxisConversionPanningClass.pas',
+  DrawingAxisConversionZoomingClass in 'Source\AxisConversion\DrawingAxisConversionZoomingClass.pas';
 
 { keep comment here to protect the following conditional from being removed by the IDE when adding a unit }
 {$IFNDEF TESTINSIGHT}

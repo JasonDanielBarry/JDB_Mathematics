@@ -414,12 +414,16 @@ implementation
 
         //calculate vector from tail to head
             class function TGeomPoint.calculateVector(const startPointIn, endPointIn : TGeomPoint) : TLAVector;
+                var
+                    vectorOut : TArray<double>;
                 begin
-                    result :=   [
-                                    endPointIn.x - startPointIn.x,
-                                    endPointIn.y - startPointIn.y,
-                                    endPointIn.z - startPointIn.z
-                                ];
+                    SetLength( vectorOut, 3 );
+
+                    vectorOut[0] := endPointIn.x - startPointIn.x;
+                    vectorOut[1] := endPointIn.y - startPointIn.y;
+                    vectorOut[2] := endPointIn.z - startPointIn.z;
+
+                    result := vectorOut;
                 end;
 
         //calculate centre point

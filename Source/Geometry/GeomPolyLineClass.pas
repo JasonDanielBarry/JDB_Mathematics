@@ -17,8 +17,7 @@ interface
                 //
             public
                 //constructor
-                    constructor create(); overload;
-                    constructor create(const arrPointsIn : TArray<TGeomPoint>); overload;
+                    constructor create();
                 //destructor
                     destructor destroy(); override;
                 //accessors
@@ -33,6 +32,8 @@ interface
                                                 xIn, yIn, zIn   : double    ); overload;
                         procedure editVertex(   indexIn     : integer;
                                                 newPointIn  : TGeomPoint); overload;
+                    //set points
+                        procedure setVertices(const arrPointsIn : TArray<TGeomPoint>);
                 //calculations
                     function calculateCentroidPoint() : TGeomPoint; override;
                     function calculatePolylineLength() : double; overload;
@@ -58,13 +59,6 @@ implementation
                     inherited create();
 
                     SetLength(arrGeomPoints,  0);
-                end;
-
-            constructor TGeomPolyLine.create(const arrPointsIn : TArray<TGeomPoint>);
-                begin
-                    create();
-
-                    TGeomPoint.copyPoints( arrPointsIn, arrGeomPoints );
                 end;
 
         //destructor
@@ -131,6 +125,12 @@ implementation
                                                     newPointIn  : TGeomPoint);
                     begin
                         arrGeomPoints[ indexIn ].copyPoint( newPointIn );
+                    end;
+
+            //set points
+                procedure TGeomPolyLine.setVertices(const arrPointsIn : TArray<TGeomPoint>);
+                    begin
+                        TGeomPoint.copyPoints( arrPointsIn, arrGeomPoints );
                     end;
 
         //calculations

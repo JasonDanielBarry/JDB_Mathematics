@@ -206,7 +206,7 @@ implementation
                             rowVector1 := matrix1In[row];
                             rowVector2 := matrix2In[row];
 
-                            if ( NOT(vectorsAreSameSize(rowVector1, rowVector2)) ) then
+                            if NOT( VectorMethods.vectorsAreSameSize( rowVector1, rowVector2 ) ) then
                                 begin
                                     result := False;
                                     exit();

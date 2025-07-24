@@ -7,7 +7,7 @@ interface
         LinearAlgebraTypes
         ;
 
-    //test is vectors are the same size
+    //test if vectors are the same size
         function vectorsAreSameSize(const vector1In, vector2In : TLAVector) : boolean;
 
     //copy vector

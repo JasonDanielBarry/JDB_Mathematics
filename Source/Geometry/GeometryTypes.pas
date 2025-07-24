@@ -28,10 +28,10 @@ interface
                 var
                     x, y, z : double;
                 //constructors
-                    constructor create(const xIn, yIn, zIn : double); overload;
-                    constructor create(const xIn, yIn : double); overload;
+                    constructor create(const xIn, yIn : double; const zIn : double = 0); overload;
                     constructor create(const PointFIn : TPointF); overload;
                     constructor create(const PointIn : TPoint); overload;
+                    class function createPointArray(const arrXIn, arrYIn : TArray<double>; const arrZIn : TArray<double> = []) : TArray<TGeomPoint>; static;
                 //comparison
                     function greaterThan(const pointIn : TGeomPoint) : boolean;
                     function greaterThanOrEqual(const pointIn : TGeomPoint) : boolean;
@@ -39,8 +39,7 @@ interface
                     function lessThan(const pointIn : TGeomPoint) : boolean;
                     function lessThanOrEqual(const pointIn : TGeomPoint) : boolean;
                 //set point
-                    procedure setPoint(const xIn, yIn, zIn : double); overload;
-                    procedure setPoint(const xIn, yIn : double); overload;
+                    procedure setPoint(const xIn, yIn : double; const zIn : double = 0); overload;
                     procedure setPoint(const PointFIn : TPointF); overload;
                     procedure setPoint(const PointIn : TPoint); overload;
                 //copy
@@ -50,8 +49,7 @@ interface
                     procedure shiftX(const deltaXIn : double);
                     procedure shiftY(const deltaYIn : double);
                     procedure shiftZ(const deltaZIn : double);
-                    procedure shiftPoint(const deltaXIn, deltaYIn : double); overload;
-                    procedure shiftPoint(const deltaXIn, deltaYIn, deltaZIn : double); overload;
+                    procedure shiftPoint(const deltaXIn, deltaYIn : double; const deltaZIn : double = 0);
                     class procedure shiftArrPointsByVector( const   vectorStartPointIn,
                                                                     vectorEndPointIn    : TGeomPoint;
                                                             var arrGeomPointsIn         : TArray<TGeomPoint> ); static;
@@ -157,14 +155,9 @@ implementation
 
     //public
         //constructors
-            constructor TGeomPoint.create(const xIn, yIn, zIn : double);
+            constructor TGeomPoint.create(const xIn, yIn : double; const zIn : double = 0);
                 begin
                     setPoint( xIn, yIn, zIn );
-                end;
-
-            constructor TGeomPoint.create(const xIn, yIn : double);
-                begin
-                    setPoint( xIn, yIn );
                 end;
 
             constructor TGeomPoint.create(const PointFIn : TPointF);
@@ -175,6 +168,56 @@ implementation
             constructor TGeomPoint.create(const PointIn : TPoint);
                 begin
                     setPoint( PointIn )
+                end;
+
+            class function TGeomPoint.createPointArray(const arrXIn, arrYIn : TArray<double>; const arrZIn : TArray<double> = []) : TArray<TGeomPoint>;
+                var
+                    arraysAreSameSize,
+                    arrZIsNeeded            : boolean;
+                    i, arrLen, arrZ_Size    : integer;
+                    x, y, z                 : double;
+                    arrGeomPointsOut        : TArray<TGeomPoint>;
+                begin
+                    //test if input arrays are correct sizes
+                        arraysAreSameSize := vectorsAreSameSize( arrXIn, arrYIn );
+
+                        if NOT( arraysAreSameSize ) then
+                            exit();
+
+                    //check the z array size
+                        arrZ_Size := length( arrZIn );
+
+                        if ( 0 < arrZ_Size ) then
+                            begin
+                                arraysAreSameSize := vectorsAreSameSize( arrXIn, arrZIn );
+
+                                if NOT( arraysAreSameSize ) then
+                                    exit();
+
+                                arrZIsNeeded := True;
+                            end
+                        else
+                            arrZIsNeeded := False;
+
+                    //loop through arrays and populate point array
+                        arrLen := length( arrXIn );
+
+                        SetLength( arrGeomPointsOut, arrLen );
+
+                        for i := 0 to ( arrLen - 1 ) do
+                            begin
+                                x := arrXIn[i];
+                                y := arrYIn[i];
+
+                                if ( arrZIsNeeded ) then
+                                    z := arrZIn[i]
+                                else
+                                    z := 0;
+
+                                arrGeomPointsOut[i].setPoint( x, y, z );
+                            end;
+
+                    result := arrGeomPointsOut;
                 end;
 
         //comparison
@@ -212,16 +255,11 @@ implementation
                 end;
 
         //set point
-            procedure TGeomPoint.setPoint(const xIn, yIn, zIn : double);
+            procedure TGeomPoint.setPoint(const xIn, yIn : double; const zIn : double = 0);
                 begin
                     x := xIn;
                     y := yIn;
                     z := zIn;
-                end;
-
-            procedure TGeomPoint.setPoint(const xIn, yIn : double);
-                begin
-                    setPoint( xIn, yIn, 0 );
                 end;
 
             procedure TGeomPoint.setPoint(const PointFIn : TPointF);
@@ -291,13 +329,7 @@ implementation
                     self.z := self.z + deltaZIn;
                 end;
 
-            procedure TGeomPoint.shiftPoint(const deltaXIn, deltaYIn : double);
-                begin
-                    shiftX( deltaXIn );
-                    shiftY( deltaYIn );
-                end;
-
-            procedure TGeomPoint.shiftPoint(const deltaXIn, deltaYIn, deltaZIn : double);
+            procedure TGeomPoint.shiftPoint(const deltaXIn, deltaYIn : double; const deltaZIn : double = 0);
                 begin
                     shiftX( deltaXIn );
                     shiftY( deltaYIn );

@@ -24,16 +24,17 @@ interface
                     function getVertex(indexIn : integer) : TGeomPoint;
                 //modifiers
                     //add a new vertex and line
-                        function addVertex(const xIn, yIn : double) : boolean; overload;
-                        function addVertex(const xIn, yIn, zIn : double) : boolean; overload;
+                        function addVertex(const xIn, yIn : double; const zIn : double = 0) : boolean; overload;
                         function addVertex(const newVertexIn : TGeomPoint) : boolean; overload;
                     //edit a currently selected vertex
-                        procedure editVertex(   indexIn         : integer;
-                                                xIn, yIn, zIn   : double    ); overload;
-                        procedure editVertex(   indexIn     : integer;
-                                                newPointIn  : TGeomPoint); overload;
+                        procedure editVertex(   const indexIn   : integer;
+                                                const xIn, yIn  : double;
+                                                const zIn       : double = 0 ); overload;
+                        procedure editVertex(   const indexIn       : integer;
+                                                const newPointIn    : TGeomPoint ); overload;
                     //set points
-                        procedure setVertices(const arrPointsIn : TArray<TGeomPoint>);
+                        procedure setVertices(const arrXIn, arrYIn : TArray<double>; const arrZIn : TArray<double> = []); overload;
+                        procedure setVertices(const arrPointsIn : TArray<TGeomPoint>); overload;
                 //calculations
                     function calculateCentroidPoint() : TGeomPoint; override;
                     function calculatePolylineLength() : double; overload;
@@ -74,12 +75,7 @@ implementation
                 end;
 
         //add a line to the array of lines
-            function TGeomPolyLine.addVertex(const xIn, yIn : double) : boolean;
-                begin
-                    result := addVertex(xIn, yIn, 0);
-                end;
-
-            function TGeomPolyLine.addVertex(const xIn, yIn, zIn : double) : boolean;
+            function TGeomPolyLine.addVertex(const xIn, yIn : double; const zIn : double = 0) : boolean;
                 begin
                     result := addVertex(
                                             TGeomPoint.create(xIn, yIn, zIn)
@@ -115,19 +111,29 @@ implementation
                 end;
 
             //edit a currently selected vertex
-                procedure TGeomPolyLine.editVertex( indexIn         : integer;
-                                                    xIn, yIn, zIn   : double    );
+                procedure TGeomPolyLine.editVertex( const indexIn   : integer;
+                                                    const xIn, yIn  : double;
+                                                    const zIn       : double = 0 );
                     begin
                         arrGeomPoints[ indexIn ].setPoint( xIn, yIn, zIn );
                     end;
 
-                procedure TGeomPolyLine.editVertex( indexIn     : integer;
-                                                    newPointIn  : TGeomPoint);
+                procedure TGeomPolyLine.editVertex( const indexIn       : integer;
+                                                    const newPointIn    : TGeomPoint );
                     begin
                         arrGeomPoints[ indexIn ].copyPoint( newPointIn );
                     end;
 
             //set points
+                procedure TGeomPolyLine.setVertices(const arrXIn, arrYIn : TArray<double>; const arrZIn : TArray<double> = []);
+                    var
+                        newArrGeomPoint : TArray<TGeomPoint>;
+                    begin
+                        newArrGeomPoint := TGeomPoint.createPointArray( arrXIn, arrYIn, arrZIn );
+
+                        setVertices( newArrGeomPoint );
+                    end;
+
                 procedure TGeomPolyLine.setVertices(const arrPointsIn : TArray<TGeomPoint>);
                     begin
                         TGeomPoint.copyPoints( arrPointsIn, arrGeomPoints );

@@ -16,8 +16,8 @@ implementation
     uses
         system.Math,
         LinearAlgebraTypes,
-        VectorMethods,
-        MatrixMethods
+        LAVectorMethods,
+        LAMatrixMethods
         ;
 
     //formulae for line intersection:

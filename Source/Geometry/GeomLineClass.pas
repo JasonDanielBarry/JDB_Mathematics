@@ -5,7 +5,7 @@ interface
     uses
         system.sysUtils, system.Math, system.Types,
         LinearAlgebraTypes,
-        VectorMethods,
+        LAVectorMethods,
         GeometryMathMethods,
         GeometryTypes, GeomBox,
         GeometryBaseClass, GeomSpaceVectorClass;

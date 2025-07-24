@@ -6,7 +6,7 @@ interface
         System.SysUtils, system.Math, system.Types,
         LinearAlgebraTypes,
         LinearRescalingMethods,
-        MatrixMethods, VectorMethods
+        LAMatrixMethods, LAVectorMethods
         ;
 
      type

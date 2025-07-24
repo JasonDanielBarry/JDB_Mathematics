@@ -135,11 +135,11 @@
         <DCCReference Include="Source\Geometry\TEST_GeomLineClass.pas"/>
         <DCCReference Include="Source\LinearAlgebra\LinearAlgebraTypes.pas"/>
         <DCCReference Include="Source\LinearAlgebra\LineIntersectionMethods.pas"/>
-        <DCCReference Include="Source\LinearAlgebra\VectorMethods.pas"/>
-        <DCCReference Include="Source\LinearAlgebra\Matrices\MatrixDeterminantMethods.pas"/>
-        <DCCReference Include="Source\LinearAlgebra\Matrices\MatrixHelperMethods.pas"/>
-        <DCCReference Include="Source\LinearAlgebra\Matrices\MatrixMethods.pas"/>
-        <DCCReference Include="Source\LinearAlgebra\Matrices\TEST_MatrixMethods.pas"/>
+        <DCCReference Include="Source\LinearAlgebra\LAVectorMethods.pas"/>
+        <DCCReference Include="Source\LinearAlgebra\Matrices\LAMatrixDeterminantMethods.pas"/>
+        <DCCReference Include="Source\LinearAlgebra\Matrices\LAMatrixHelperMethods.pas"/>
+        <DCCReference Include="Source\LinearAlgebra\Matrices\LAMatrixMethods.pas"/>
+        <DCCReference Include="Source\LinearAlgebra\Matrices\TEST_LAMatrixMethods.pas"/>
         <DCCReference Include="Source\AxisConversion\DrawingAxisConversionAspectRatioClass.pas"/>
         <DCCReference Include="Source\AxisConversion\DrawingAxisConversionBaseClass.pas"/>
         <DCCReference Include="Source\AxisConversion\DrawingAxisConversionCalculationsClass.pas"/>

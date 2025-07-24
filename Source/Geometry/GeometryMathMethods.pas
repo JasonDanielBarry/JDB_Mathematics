@@ -6,7 +6,7 @@ interface
         System.SysUtils, system.Math, system.Types,
         LineIntersectionMethods,
         LinearAlgebraTypes,
-        MatrixMethods,
+        LAMatrixMethods,
         GeometryTypes,
         GeomBox
         ;

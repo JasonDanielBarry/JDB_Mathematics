@@ -7,7 +7,7 @@ interface
     uses
         system.sysutils, system.Math,
         LinearAlgebraTypes,
-        VectorMethods,
+        LAVectorMethods,
         GeometryTypes,
         GeometryBaseClass;
 

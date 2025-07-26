@@ -76,15 +76,17 @@ implementation
 
         //add a line to the array of lines
             function TGeomPolyLine.addVertex(const xIn, yIn : double; const zIn : double = 0) : boolean;
+                var
+                    newPoint : TGeomPoint;
                 begin
-                    result := addVertex(
-                                            TGeomPoint.create(xIn, yIn, zIn)
-                                       );
+                    newPoint.setPoint( xIn, yIn, zIn );
+
+                    result := addVertex( newPoint );
                 end;
 
             function TGeomPolyLine.addVertex(const newVertexIn : TGeomPoint) : boolean;
                 var
-                    samePointTest   : boolean;
+                    samePointExists : boolean;
                     i, arrLen       : integer;
                     dp              : double;
                 begin
@@ -97,9 +99,9 @@ implementation
                             begin
                                 dp := TGeomPoint.calculateDistanceBetweenPoints( newVertexIn, arrGeomPoints[i] );
 
-                                samePointTest := (dp < 1e-6);
+                                samePointExists := (dp < 1e-6);
 
-                                if (samePointTest = True) then
+                                if ( samePointExists ) then
                                     exit( False );
                             end;
 

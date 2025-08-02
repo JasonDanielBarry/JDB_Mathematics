@@ -79,15 +79,15 @@ implementation
                 procedure TDrawingAxisConverterBase.setDrawingRegion(   const bufferIn : double;
                                                                         const regionIn : TGeomBox   );
                     var
-                        buffer : double;
+                        validBuffer : double;
                     begin
-                        //set valid buffer
-                            buffer := min(5, bufferIn);
-                            buffer := max(buffer, 0);
+                        //set valid validBuffer
+                            validBuffer := min(5, bufferIn);
+                            validBuffer := max(validBuffer, 0);
 
-                        //copy in the new region and apply buffer
+                        //copy in the new region and apply validBuffer
                             drawingRegion.copyBox( regionIn );
-                            drawingRegion.scaleBox( 1 + (buffer / 100) );
+                            drawingRegion.scaleBox( 1 + (validBuffer / 100) );
                     end;
 
         //helper methods

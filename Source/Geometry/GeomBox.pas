@@ -89,10 +89,10 @@ implementation
             begin
                 SetLength( arrGeomPointsOut, 4 );
 
-                arrGeomPointsOut[0].setPoint(xmin, yMin);
-                arrGeomPointsOut[1].setPoint(xMin, yMax);
+                arrGeomPointsOut[0].setPoint(xMin, yMin);
+                arrGeomPointsOut[1].setPoint(xMax, yMin);
                 arrGeomPointsOut[2].setPoint(xMax, yMax);
-                arrGeomPointsOut[3].setPoint(xMax, yMin);
+                arrGeomPointsOut[3].setPoint(xMin, yMax);
 
                 result := arrGeomPointsOut;
             end;

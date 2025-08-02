@@ -57,7 +57,7 @@ implementation
         //recentre drawing region
             procedure TDrawingAxisPanningConverter.recentreDrawingRegion();
                 begin
-                    drawingRegion.setCentrePoint( geometryBoundaryCentre );
+                    drawingRegion.setCentrePoint( graphicBoundaryCentre );
                 end;
 
 end.

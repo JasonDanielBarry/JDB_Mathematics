@@ -22,7 +22,7 @@ implementation
         begin
             t := (X - X0) / (X1 - X0);
 
-            result := lerp(t, Y0, Y1);
+            result := lerp( t, Y0, Y1 );
         end;
 
 end.

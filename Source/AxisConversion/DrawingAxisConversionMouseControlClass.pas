@@ -61,7 +61,7 @@ implementation
         //activate mouse panning
             procedure TDrawingAxisMouseControlConverter.activateMousePanning();
                 begin
-                    //this function must only
+                    //this function must only run if mouseControlIsActive is True
                         if NOT( mouseControlIsActive ) then
                             begin
                                 deactivateMouseControl();
@@ -69,7 +69,7 @@ implementation
                             end;
 
                     //if mouse panning is already active then the function must exit so as not to override the panning origin points
-                        if (mousePanningIsActive) then
+                        if ( mousePanningIsActive ) then
                             exit();
 
                     mousePanningIsActive := True;
@@ -88,19 +88,24 @@ implementation
             procedure TDrawingAxisMouseControlConverter.panRegionWithMouse();
                 var
                     mouse_dL,           mouse_dT            : integer;
+                    mouseRegionShiftX,  mouseRegionShiftY,
                     newRegionCentreX,   newRegionCentreY    : double;
                 begin
                     if NOT( mousePanningIsActive ) then
                         exit();
 
-                    //calculate how much the mouse moves from the point where the middle mouse button is pressed down
+                    //calculate how much the mouse moves from the point where the middle mouse button was pressed down
                         mouse_dL :=  currentMousePosition.X - mousePanningOrigin.X;
                         mouse_dT :=  currentMousePosition.Y - mousePanningOrigin.Y;
 
+                    //calculate the shift on the XY-axis
+                        mouseRegionShiftX := dL_To_dX( mouse_dL );
+                        mouseRegionShiftY := dT_To_dY( mouse_dT );
+
                     //calculate new region centre point
                     //the shift is subtracted because the region centre must move in the opposite direction to the mouse
-                        newRegionCentreX := regionPanningOrigin.x - dL_To_dX( mouse_dL ); //mouseRegionShiftX = dL_To_dX( mouse_dL );
-                        newRegionCentreY := regionPanningOrigin.y - dT_To_dY( mouse_dT ); //mouseRegionShiftY = dT_To_dY( mouse_dT );
+                        newRegionCentreX := regionPanningOrigin.x - mouseRegionShiftX;
+                        newRegionCentreY := regionPanningOrigin.y - mouseRegionShiftY;
 
                     //move region to new position
                         drawingRegion.setCentrePoint( newRegionCentreX, newRegionCentreY );

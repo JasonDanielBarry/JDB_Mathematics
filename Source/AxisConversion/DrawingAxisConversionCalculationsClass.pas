@@ -88,20 +88,24 @@ implementation
 
         //canvasSpace-to-drawing
             function TDrawingAxisConvertionCalculator.LT_to_XY(const L_In, T_In : double) : TGeomPoint;
+                var
+                    x, y : double;
                 begin
-                    result.setPoint(
-                                        L_to_X(L_In),
-                                        T_to_Y(T_In)
-                                   );
+                    x := L_to_X(L_In);
+                    y := T_to_Y(T_In);
+
+                    result.setPoint( x, y );
                 end;
 
         //drawing-to-canvas
             function TDrawingAxisConvertionCalculator.XY_to_LT(const X_In, Y_In : double) : TPointF;
+                var
+                    l, t : double;
                 begin
-                    result := PointF(
-                                        X_to_L(X_In),
-                                        Y_to_T(Y_In)
-                                    );
+                    l := X_to_L(X_In);
+                    t := Y_to_T(Y_In);
+
+                    result := PointF( l, t );
                 end;
 
     //public
@@ -154,14 +158,14 @@ implementation
             //canvasSpace-to-drawing
                 function TDrawingAxisConvertionCalculator.LT_to_XY(const pointIn : TPointF) : TGeomPoint;
                     begin
-                        result := LT_to_XY(pointIn.X, pointIn.Y);
+                        result := LT_to_XY( pointIn.X, pointIn.Y );
                     end;
 
                 function TDrawingAxisConvertionCalculator.LT_to_XY(const pointIn : TPoint) : TGeomPoint;
                     var
                         newPoint : TPointF;
                     begin
-                        newPoint := TPointF.create(pointIn);
+                        newPoint := TPointF.create( pointIn );
 
                         result := LT_to_XY(newPoint);
                     end;
@@ -183,12 +187,14 @@ implementation
 
                 function TDrawingAxisConvertionCalculator.arrLT_to_arrXY(const arrLT_In : TArray<TPoint>) : TArray<TGeomPoint>;
                     var
-                        i               : integer;
-                        arrPointF       : TArray<TPointF>;
+                        i, arrLen   : integer;
+                        arrPointF   : TArray<TPointF>;
                     begin
-                        SetLength(arrPointF, length(arrLT_In));
+                        arrLen := length(arrLT_In);
 
-                        for i := 0 to (length(arrPointF) - 1) do
+                        SetLength(arrPointF, arrLen);
+
+                        for i := 0 to (arrLen - 1) do
                             arrPointF[i] := TPointF.create(arrLT_In[i]);
 
                         result := arrLT_to_arrXY(arrPointF);
@@ -197,7 +203,7 @@ implementation
             //drawing-to-canvas
                 function TDrawingAxisConvertionCalculator.XY_to_LT(const pointIn : TGeomPoint) : TPointF;
                     begin
-                        result := XY_to_LT(pointIn.x, pointIn.y);
+                        result := XY_to_LT( pointIn.x, pointIn.y );
                     end;
 
                 function TDrawingAxisConvertionCalculator.arrXY_to_arrLT(const arrXY_In : TArray<TGeomPoint>) : TArray<TPointF>;

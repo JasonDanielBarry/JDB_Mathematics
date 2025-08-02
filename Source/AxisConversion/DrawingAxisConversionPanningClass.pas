@@ -51,7 +51,7 @@ implementation
 
             procedure TDrawingAxisPanningConverter.shiftDrawingRegion(const deltaXIn, deltaYIn : double);
                 begin
-                    drawingRegion.shiftBox(deltaXIn, deltaYIn);
+                    drawingRegion.shiftBox( deltaXIn, deltaYIn );
                 end;
 
         //recentre drawing region

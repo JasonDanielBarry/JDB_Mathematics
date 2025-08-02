@@ -95,15 +95,16 @@ implementation
                         exit();
 
                     //calculate how much the mouse moves from the point where the middle mouse button was pressed down
-                        mouse_dL :=  currentMousePosition.X - mousePanningOrigin.X;
-                        mouse_dT :=  currentMousePosition.Y - mousePanningOrigin.Y;
+                        mouse_dL := currentMousePosition.X - mousePanningOrigin.X;
+                        mouse_dT := currentMousePosition.Y - mousePanningOrigin.Y;
 
-                    //calculate the shift on the XY-axis
+                    //calculate the mouse shift on the XY-region
                         mouseRegionShiftX := dL_To_dX( mouse_dL );
                         mouseRegionShiftY := dT_To_dY( mouse_dT );
 
                     //calculate new region centre point
                     //the shift is subtracted because the region centre must move in the opposite direction to the mouse
+                    //this has the effect of the graphic moving with the mouse
                         newRegionCentreX := regionPanningOrigin.x - mouseRegionShiftX;
                         newRegionCentreY := regionPanningOrigin.y - mouseRegionShiftY;
 
@@ -116,7 +117,7 @@ implementation
                 var
                     regionPoint : TGeomPoint;
                 begin
-                    regionPoint := LT_to_XY( currentMousePosition );
+                    regionPoint := getMouseCoordinatesXY();
 
                     zoomIn( 20, regionPoint );
                 end;
@@ -125,14 +126,16 @@ implementation
                 var
                     regionPoint : TGeomPoint;
                 begin
-                    regionPoint := LT_to_XY( currentMousePosition );
+                    regionPoint := getMouseCoordinatesXY();
 
                     zoomOut( 20, regionPoint );
                 end;
 
             procedure TDrawingAxisMouseControlConverter.zoomRelativeToMouse(const messageIn : TMessage);
+                const
+                    MOUSE_WHEEL_UP : integer = 7864320;
                 begin
-                    if (messageIn.WParam = 7864320) then
+                    if ( messageIn.WParam = MOUSE_WHEEL_UP ) then
                         zoomInRelativeToMouse()
                     else
                         zoomOutRelativeToMouse();
@@ -201,7 +204,7 @@ implementation
 
                         WM_MBUTTONDBLCLK:
                             begin
-                                resetDrawingRegionToGeometryBoundary(); //has effect of zoom all
+                                resetDrawingRegionToGraphicBoundary(); //has effect of zoom all
                                 result := True;
                             end;
 

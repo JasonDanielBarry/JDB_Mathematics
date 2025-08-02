@@ -29,9 +29,9 @@ interface
                 //destructor
                     destructor destroy(); override;
                 //modifiers
-                    procedure setGeometryBorderPercentage(const geometryBorderPercentageIn : double);
-                    procedure setGeometryBoundary(const boundaryBoxIn : TGeomBox);
-                    procedure resetDrawingRegionToGeometryBoundary();
+                    procedure setGraphicBorderPercentage(const graphicBorderPercentageIn : double);
+                    procedure setGraphicBoundary(const boundaryBoxIn : TGeomBox);
+                    procedure resetDrawingRegionToGraphicBoundary();
                 //zooming methods
                     function calculateCurrentZoomPercentage() : double;
                     procedure zoomIn(   const zoomPercentageIn : double;
@@ -96,7 +96,7 @@ implementation
                 begin
                     inherited create();
 
-                    setGeometryBorderPercentage( 5 );
+                    setGraphicBorderPercentage( 5 );
 
                     graphicBoundary.minPoint.setPoint( 0, 0, 0 );
                     graphicBoundary.maxPoint.setPoint( 0, 0, 0 );
@@ -109,16 +109,16 @@ implementation
                 end;
 
         //modifiers
-            procedure TDrawingAxisZoomingConverter.setGeometryBorderPercentage(const geometryBorderPercentageIn : double);
+            procedure TDrawingAxisZoomingConverter.setGraphicBorderPercentage(const graphicBorderPercentageIn : double);
                 const
                     MIN_VALUE : double = 0;
                     MAX_VALUE : double = 5;
                 begin
-                    graphicBorderPercentage := max( MIN_VALUE, geometryBorderPercentageIn );
-                    graphicBorderPercentage := min( geometryBorderPercentageIn, MAX_VALUE );
+                    graphicBorderPercentage := max( MIN_VALUE, graphicBorderPercentageIn );
+                    graphicBorderPercentage := min( graphicBorderPercentageIn, MAX_VALUE );
                 end;
 
-            procedure TDrawingAxisZoomingConverter.setGeometryBoundary(const boundaryBoxIn : TGeomBox);
+            procedure TDrawingAxisZoomingConverter.setGraphicBoundary(const boundaryBoxIn : TGeomBox);
                 begin
                     graphicBoundary.copyBox( boundaryBoxIn );
 
@@ -134,7 +134,7 @@ implementation
                     graphicBoundaryCentre.copyPoint( graphicBoundary.calculateCentrePoint() );
                 end;
 
-            procedure TDrawingAxisZoomingConverter.resetDrawingRegionToGeometryBoundary();
+            procedure TDrawingAxisZoomingConverter.resetDrawingRegionToGraphicBoundary();
                 begin
                     setDrawingRegion( graphicBorderPercentage, graphicBoundary );
                 end;
@@ -147,8 +147,8 @@ implementation
                     largestDimensionsRatio                      : double;
                 begin
                     //zoom is the ratio of the graphic boundary to the drawing region
-                        domainDimensionsRatio    := graphicBoundary.calculateXDimension() / drawingRegion.calculateXDimension();
-                        rangeDimensionsRatio     := graphicBoundary.calculateYDimension() / drawingRegion.calculateYDimension();
+                        domainDimensionsRatio   := graphicBoundary.calculateXDimension() / drawingRegion.calculateXDimension();
+                        rangeDimensionsRatio    := graphicBoundary.calculateYDimension() / drawingRegion.calculateYDimension();
 
                     //max function is used because graphicBoundary and drawingRegion can have different dimension ratios
                     //the larger value between the respective dimension ratios is the zoom percentage

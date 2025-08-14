@@ -24,8 +24,8 @@ interface
                     function getVertex(indexIn : integer) : TGeomPoint;
                 //modifiers
                     //add a new vertex and line
-                        function addVertex(const xIn, yIn : double; const zIn : double = 0) : boolean; overload;
-                        function addVertex(const newVertexIn : TGeomPoint) : boolean; overload;
+                        function addVertex(const xIn, yIn : double; const zIn : double = 0; const checkForDuplicatePointsIn : boolean = True) : boolean; overload;
+                        function addVertex(const newVertexIn : TGeomPoint; const checkForDuplicatePointsIn : boolean = True) : boolean; overload;
                     //edit a currently selected vertex
                         procedure editVertex(   const indexIn   : integer;
                                                 const xIn, yIn  : double;
@@ -75,16 +75,16 @@ implementation
                 end;
 
         //add a line to the array of lines
-            function TGeomPolyLine.addVertex(const xIn, yIn : double; const zIn : double = 0) : boolean;
+            function TGeomPolyLine.addVertex(const xIn, yIn : double; const zIn : double = 0; const checkForDuplicatePointsIn : boolean = True) : boolean;
                 var
                     newPoint : TGeomPoint;
                 begin
                     newPoint.setPoint( xIn, yIn, zIn );
 
-                    result := addVertex( newPoint );
+                    result := addVertex( newPoint, checkForDuplicatePointsIn );
                 end;
 
-            function TGeomPolyLine.addVertex(const newVertexIn : TGeomPoint) : boolean;
+            function TGeomPolyLine.addVertex(const newVertexIn : TGeomPoint; const checkForDuplicatePointsIn : boolean = True) : boolean;
                 var
                     samePointExists : boolean;
                     i, arrLen       : integer;
@@ -95,15 +95,16 @@ implementation
                     arrLen := vertexCount();
 
                     //test to see if the new point already exists
-                        for i := 0 to (arrLen - 1) do
-                            begin
-                                dp := TGeomPoint.calculateDistanceBetweenPoints( newVertexIn, arrGeomPoints[i] );
+                        if ( checkForDuplicatePointsIn ) then
+                            for i := 0 to (arrLen - 1) do
+                                begin
+                                    dp := TGeomPoint.calculateDistanceBetweenPoints( newVertexIn, arrGeomPoints[i] );
 
-                                samePointExists := (dp < 1e-6);
+                                    samePointExists := (dp < 1e-6);
 
-                                if ( samePointExists ) then
-                                    exit( False );
-                            end;
+                                    if ( samePointExists ) then
+                                        exit( False );
+                                end;
 
                     //increment vertex array
                         SetLength( arrGeomPoints, arrLen + 1 );

@@ -45,7 +45,7 @@ interface
                 //activate/deactivate mouse point tracking
                     procedure setRedrawOnMouseMoveActive(const isActiveIn : boolean);
                 //process windows messages
-                    function windowsMessageRequiredRedraw(  const newMousePositionIn    : TPoint;
+                    function windowsMessageRequiresRedraw(  const newMousePositionIn    : TPoint;
                                                             const messageIn             : Tmessage  ) : boolean;
         end;
 
@@ -182,7 +182,7 @@ implementation
                 end;
 
         //process windows messages
-            function TDrawingAxisMouseControlConverter.windowsMessageRequiredRedraw(const newMousePositionIn    : TPoint;
+            function TDrawingAxisMouseControlConverter.windowsMessageRequiresRedraw(const newMousePositionIn    : TPoint;
                                                                                     const messageIn             : Tmessage) : boolean;
                 begin
                     result := false;

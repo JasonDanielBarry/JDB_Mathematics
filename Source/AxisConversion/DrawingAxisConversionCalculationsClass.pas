@@ -34,7 +34,7 @@ interface
                     //region to canvas
                         function dX_To_dL(const dX_In : double) : double;
                         function dY_To_dT(const dY_In : double) : double;
-                //convertion calculations
+                //conversion calculations
                     //canvas-to-drawing
                         function LT_to_XY(const pointIn : TPointF) : TGeomPoint; overload;
                         function LT_to_XY(const pointIn : TPoint) : TGeomPoint; overload;
